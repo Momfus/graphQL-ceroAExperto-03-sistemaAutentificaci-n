@@ -9,7 +9,7 @@
 
 type Mutation {
     "Registro de los usuarios en el sistema"
-    register(user: UserInput): User!
+    register(user: UserInput): ResultUser!
 }
 
 # Definición de tipos
@@ -20,6 +20,14 @@ type User {
     email: String!
     password: String
     registerDate: String!
+}
+
+type ResultUser {
+
+    status: Boolean!
+    message: String!
+    user: User
+
 }
 
 # Definición de inputs

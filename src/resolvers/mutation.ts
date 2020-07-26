@@ -17,10 +17,24 @@ const mutation : IResolvers = {
             // Fecha de registro
             user.registerDate = new Datetime().getCurrentDateTime();
             
-            // Agregar el nuevo elemento
-            await db.collection('users').insertOne(user);
+            // Agregar el nuevo elemento y devolver segun el resultado obtenido (exito o error)
+            return await db.collection('users').insertOne(user)
+                    .then( (result: any) => {
 
-            return user;
+                        return {
+                            status: true,
+                            message: `Usuario ${user.name} ${user.lastname} añadido correctamente`,
+                            user // igual que user:user (es identico para typescript)
+                        }
+
+                    })
+                    .catch((err: any) => {
+                        return {
+                            status: true,
+                            message: `Usuario NO añadido correctamente`,
+                            user: null
+                        }
+                    });
 
         }
     }
