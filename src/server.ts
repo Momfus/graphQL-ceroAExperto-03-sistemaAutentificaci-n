@@ -5,6 +5,7 @@ import schema from './schema';
 import { ApolloServer } from 'apollo-server-express';
 import { createServer } from 'http';
 import environments from './config/environment';
+import Database from './config/database';
 
 // De estar en desarrollo, establecer el ambiente orrespondiente
 if( process.env.NODE_ENV !== 'production') {
@@ -25,6 +26,11 @@ async function init() {
     
     app.use(compression());
     
+    // Comenzar conexión a la base de datos
+    const database = new Database();
+    const db = await database.init();  // Esperar que se inicia
+
+    // Iniciar conexión a ApolloServer
     const server = new ApolloServer({
         schema,
         introspection: true
