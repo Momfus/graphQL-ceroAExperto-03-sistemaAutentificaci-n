@@ -30,9 +30,17 @@ async function init() {
     const database = new Database();
     const db = await database.init();  // Esperar que se inicia
 
+    // Conexto de graphql
+    const context: any = async( {req, connection}: any ) => {
+
+        return { db }; // Permite que cualquier resolver utilice esto (primer parámetro información del padre, segundo del argumento y tercero del context)
+
+    };
+
     // Iniciar conexión a ApolloServer
     const server = new ApolloServer({
         schema,
+        context,
         introspection: true
     });
     
