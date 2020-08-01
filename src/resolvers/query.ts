@@ -40,6 +40,9 @@ const query : IResolvers = {
 
             }
 
+            // No dejar que se vea en el token el password
+            delete user.password
+
             // Caso que haya resultado de usuario
             return {
                 status: true,
