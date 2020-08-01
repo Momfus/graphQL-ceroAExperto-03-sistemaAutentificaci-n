@@ -33,7 +33,9 @@ async function init() {
     // Conexto de graphql
     const context: any = async( {req, connection}: any ) => {
 
-        return { db }; // Permite que cualquier resolver utilice esto (primer parámetro información del padre, segundo del argumento y tercero del context)
+        const token = req ? req.headers.authorization : connection.authorization; //  se envia el token dentro del contexto con la información de las cabeceras o la conección
+
+        return { db, token }; // Permite que cualquier resolver utilice esto (primer parámetro información del padre, segundo del argumento y tercero del context)
 
     };
 

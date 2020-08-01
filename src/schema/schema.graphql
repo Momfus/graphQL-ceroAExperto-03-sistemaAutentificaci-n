@@ -4,7 +4,7 @@
     "Iniciamos sesión en el sistema"
     login(email: String!, password: String!): ResultToken!
     "Obtener nuestra información con el token"
-    me: User!
+    me: ResultUser!
 }
 
 type Mutation {

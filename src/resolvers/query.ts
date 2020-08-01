@@ -51,6 +51,28 @@ const query : IResolvers = {
                 token: new JWT().sign( {user} ) // user: user es lo mismo que solo user
             }
         
+        },
+        // Autorización mediante token
+        me( _: void, __: any, { token } ) {
+
+            let info: any = new JWT().verify(token);
+
+            // En caso de no ser válido
+            if( info === 'La autenticación del token es inválida. Por favor, inicia sesión para obtener un nuevo token' ) {
+                return {
+                    status: false,
+                    message: info,
+                    token: null
+                }
+            }
+
+            // En caso de éxito
+            return {
+                status: true,
+                message: 'Token Correcto',
+                user: info.user
+            }
+
         }
 
     }
