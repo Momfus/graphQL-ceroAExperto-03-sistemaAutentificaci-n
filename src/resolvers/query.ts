@@ -1,5 +1,6 @@
 import { IResolvers } from "graphql-tools";
 import JWT from "../lib/jwt";
+import bcryptjs from 'bcryptjs';
 
 const query : IResolvers = {
     Query : {
@@ -30,7 +31,7 @@ const query : IResolvers = {
             }
 
             // Comprobar el password de usuario
-            if( password !== user.password ) {
+            if( !bcryptjs.compareSync( password, user.password ) ) { // usar bcryptjs para descriptar el password y asi saber como compararlo correctamente
 
                 return  {
                     status: false,
