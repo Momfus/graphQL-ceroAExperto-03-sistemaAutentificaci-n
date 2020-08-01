@@ -1,9 +1,21 @@
 import { IResolvers } from "graphql-tools";
 import { Datetime } from "../lib/datetime";
+import bcryptjs from 'bcryptjs';
 
 const mutation : IResolvers = {
     Mutation : {
         async register( _: void, { user }, { db }): Promise<any> {
+
+            const userCheck = await db.collection('users').findOne( {email: user.email} ) // Filtrar por email
+
+            // verificar que el usuario existe
+            if( userCheck !== null ) {
+                return {
+                    status: true,
+                    message: `Usuario NO registrado porque ya existe el usuario ${user.email}`,
+                    user: null
+                }
+            }
 
             const lastUser = await db.collection('users').find().limit(1).sort({ registerDate: -1 }).toArray(); // Buscar el último usuario conectado (con el último elmento introducido, se coloca -1 para hacer descendente)
                    
@@ -13,6 +25,9 @@ const mutation : IResolvers = {
             } else {
                 user.id = lastUser[0].id + 1;
             }
+
+            // Encriptar password con bcryptjs
+            user.password = bcryptjs.hashSync( user.password, 10 )
             
             // Fecha de registro
             user.registerDate = new Datetime().getCurrentDateTime();
