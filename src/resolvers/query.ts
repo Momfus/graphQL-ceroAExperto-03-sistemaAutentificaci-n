@@ -1,4 +1,5 @@
 import { IResolvers } from "graphql-tools";
+import JWT from "../lib/jwt";
 
 const query : IResolvers = {
     Query : {
@@ -13,33 +14,38 @@ const query : IResolvers = {
         // Usuario especifico según email y password
         async login( _: void, { email, password }, { db } ): Promise<any> {
         
-            return await db.collection('users').findOne( {email, password} ) // Los argumentos del objeto al ser igual que la propiedad (no hace falta poner email.value ), to hace falta poner al final ".toArray()"
-                    .then( (result: any) => {
-                        if( result === null ) {
-                            return {
-                                status: false,
-                                message: 'Login INCORRECTO. Comprueba la información',
-                                user: null
-                            }
-                        }
-                        // Caso que haya resultado
-                        return {
-                            status: true,
-                            message: 'Login Correcto',
-                            user: result
-                        }
+            const user = await db.collection('users').findOne( {email} );
 
-                    } )
-                    .catch( (err: any) => { // Para manejo de otro error
+            // Comprobar si el usuario existe o no para manejar el token
+            if( user === null ) {
 
-                        return {
-                            status: false,
-                            message: 'Error Inesperado',
-                            user: null
-                        }
+                return {
 
-                    } )
-        
+                    status: false,
+                    message: 'Login INCORRECTO. No existe el usuario',
+                    token: null
+
+                }
+
+            }
+
+            // Comprobar el password de usuario
+            if( password !== user.password ) {
+
+                return  {
+                    status: false,
+                    message:  'Login INCORRECTO. Contraseña incorrecta',
+                    token: null
+                }
+
+            }
+
+            // Caso que haya resultado de usuario
+            return {
+                status: true,
+                message: 'Login Correcto',
+                token: new JWT().sign( {user} ) // user: user es lo mismo que solo user
+            }
         
         }
 

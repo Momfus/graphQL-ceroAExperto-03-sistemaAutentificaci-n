@@ -11,4 +11,4 @@ import environments from './environment';
 }
 
 
-const SECRET_KEY = process.env.SECRET || "MomfusArboleo"; // Usar la clave secreta o sino usar una por defecto para probar en ambiente local
+export const SECRET_KEY = process.env.SECRET || "MomfusArboleo"; // Usar la clave secreta o sino usar una por defecto para probar en ambiente local
