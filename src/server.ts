@@ -6,6 +6,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { createServer } from 'http';
 import environments from './config/environment';
 import Database from './config/database';
+import expressPlayground from 'graphql-playground-middleware-express'
 
 // De estar en desarrollo, establecer el ambiente orrespondiente
 if( process.env.NODE_ENV !== 'production') {
@@ -45,7 +46,16 @@ async function init() {
     });
     
     server.applyMiddleware({ app });
+
+    // Configuración para utilizar por defecto el endpoint /graphql
+    app.use('/', expressPlayground({
+
+        endpoint: '/graphql'
+
+    }));
+
     
+    // Inicio servidor con las configuraciones
     const PORT = process.env.PORT || 5300; // De no usar la varible de entorno, usar 5300
     const httpServer = createServer(app);
     httpServer.listen(
