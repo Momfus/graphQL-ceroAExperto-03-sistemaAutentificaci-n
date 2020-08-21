@@ -11,8 +11,6 @@ import Database from './config/database';
 if( process.env.NODE_ENV !== 'production') {
 
     const envs = environments;
-    console.log( envs );
-    
 
 }
 
@@ -52,7 +50,7 @@ async function init() {
     const httpServer = createServer(app);
     httpServer.listen(
         { port : PORT },
-        () => console.log(`Hola Mundo API GraphQL http://localhost:${PORT}/graphql`)
+        () => console.log(`Sistema de Autenticación JWT API GraphQL http://localhost:${PORT}/graphql`)
     );
 
 }
